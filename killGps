@@ -38,7 +38,7 @@ local function createToggleButton(text, toggleFunction)
 end
 
 local damageButton = Instance.new("TextButton")
-damageButton.Text = "Teleport Damage: OFF"
+damageButton.Text = "Kill"
 damageButton.Size = UDim2.new(0, 180, 0, buttonHeight)
 damageButton.Position = UDim2.new(0, 10, 0, yOffset)
 damageButton.BackgroundTransparency = 0
@@ -74,7 +74,7 @@ local function enableDamage()
     end
 
     damageEnabled = true
-    damageButton.Text = "Teleport Damage: ON"
+    damageButton.Text = "Kill"
 end
 
 local function disableDamage()
