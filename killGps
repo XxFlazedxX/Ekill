@@ -38,7 +38,7 @@ local function createToggleButton(text, toggleFunction)
 end
 
 local damageButton = Instance.new("TextButton")
-damageButton.Text = "Kill"
+damageButton.Text = "FlazedGrappleKill"
 damageButton.Size = UDim2.new(0, 180, 0, buttonHeight)
 damageButton.Position = UDim2.new(0, 10, 0, yOffset)
 damageButton.BackgroundTransparency = 0
@@ -74,7 +74,7 @@ local function enableDamage()
     end
 
     damageEnabled = true
-    damageButton.Text = "Kill"
+    damageButton.Text = "FlazedGrappleKill"
 end
 
 local function disableDamage()
@@ -83,7 +83,7 @@ local function disableDamage()
         damagePart.Position = Vector3.new(0, -5000, 0)
     end
     damageEnabled = false
-    damageButton.Text = "Kill"
+    damageButton.Text = "FlazedGrappleKill"
 end
 
 disableDamage()
