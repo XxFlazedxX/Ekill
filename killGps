@@ -1,40 +1,40 @@
 local gui = Instance.new("ScreenGui")
 gui.ResetOnSpawn = false
 gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-gui.Name = "YourGUIName" -- Replace "YourGUIName" with your desired GUI name
+gui.Name = "YourGUIName"
 gui.DisplayOrder = 999
 gui.Parent = game:GetService("CoreGui")
 
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 200, 0, 130)  -- Adjusted size for additional buttons
+frame.Size = UDim2.new(0, 200, 0, 130)
 frame.Position = UDim2.new(1, -220, 0, 7)
 frame.BackgroundTransparency = 0
-frame.BackgroundColor3 = Color3.new(0, 0, 0)  -- Black background
+frame.BackgroundColor3 = Color3.new(0, 0, 0)
 frame.Parent = gui
 
-local yOffset = 26  -- Increased to make room for the drag bar
+local yOffset = 26
 local buttonHeight = 15
 local buttonSpacing = 5
 
 local function createToggleButton(text, toggleFunction)
-    local button = Instance.new("TextButton")
-    button.Text = text .. ": OFF"
-    button.Size = UDim2.new(0, 180, 0, buttonHeight)
-    button.Position = UDim2.new(0, 10, 0, yOffset)
-    button.BackgroundTransparency = 0
-    button.BackgroundColor3 = Color3.new(0, 0, 0)  -- Black background for buttons
-    button.TextColor3 = Color3.new(255, 0, 127)  -- White text
-    button.Parent = frame
+	local button = Instance.new("TextButton")
+	button.Text = text .. ": OFF"
+	button.Size = UDim2.new(0, 180, 0, buttonHeight)
+	button.Position = UDim2.new(0, 10, 0, yOffset)
+	button.BackgroundTransparency = 0
+	button.BackgroundColor3 = Color3.new(0, 0, 0)
+	button.TextColor3 = Color3.new(255, 0, 127)
+	button.Parent = frame
 
-    yOffset = yOffset + buttonHeight + buttonSpacing
+	yOffset = yOffset + buttonHeight + buttonSpacing
 
-    local isEnabled = false
+	local isEnabled = false
 
-    button.MouseButton1Click:Connect(function()
-        isEnabled = not isEnabled
-        button.Text = text .. ": " .. (isEnabled and "ON" or "OFF")
-        toggleFunction(isEnabled)
-    end)
+	button.MouseButton1Click:Connect(function()
+		isEnabled = not isEnabled
+		button.Text = text .. ": " .. (isEnabled and "ON" or "OFF")
+		toggleFunction(isEnabled)
+	end)
 end
 
 local damageButton = Instance.new("TextButton")
@@ -44,7 +44,7 @@ damageButton.Position = UDim2.new(0, 10, 0, yOffset)
 damageButton.BackgroundTransparency = 0
 damageButton.BackgroundColor3 = Color3.new(0, 0, 0)
 damageButton.TextColor3 = Color3.new(255, 0, 127)
-damageButton.AutoButtonColor = false -- Disable button hover effects
+damageButton.AutoButtonColor = false
 damageButton.Parent = frame
 
 yOffset = yOffset + buttonHeight + buttonSpacing
@@ -54,36 +54,36 @@ local damageEnabled = false
 local damageTouchedConnection
 
 local function enableDamage()
-    if not damagePart then
-        warn("Damage part not found in workspace.Pit!")
-        return
-    end
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local root = character:WaitForChild("HumanoidRootPart")
+	if not damagePart then
+		warn("Damage part not found in workspace.Pit!")
+		return
+	end
+	local player = game.Players.LocalPlayer
+	local character = player.Character or player.CharacterAdded:Wait()
+	local root = character:WaitForChild("HumanoidRootPart")
 
-    damagePart.CFrame = root.CFrame
-    damagePart.Size = Vector3.new(9999999, 9999999, 9999999) -- Massive size
+	damagePart.CFrame = root.CFrame
+	damagePart.Size = Vector3.new(9999999, 9999999, 9999999)
 
-    if not damageTouchedConnection then
-        damageTouchedConnection = damagePart.Touched:Connect(function(hit)
-            if hit.Parent and hit.Parent:FindFirstChild("Humanoid") then
-                hit.Parent.Humanoid.Health = 0
-            end
-        end)
-    end
+	if not damageTouchedConnection then
+		damageTouchedConnection = damagePart.Touched:Connect(function(hit)
+			if hit.Parent and hit.Parent:FindFirstChild("Humanoid") then
+				hit.Parent.Humanoid.Health = 0
+			end
+		end)
+	end
 
-    damageEnabled = true
-    damageButton.Text = "FlazedGrappleKill"
+	damageEnabled = true
+	damageButton.Text = "FlazedGrappleKill"
 end
 
 local function disableDamage()
-    if damagePart then
-        damagePart.Size = Vector3.new(10, 10, 10)
-        damagePart.Position = Vector3.new(0, -5000, 0)
-    end
-    damageEnabled = false
-    damageButton.Text = "FlazedGrappleKill"
+	if damagePart then
+		damagePart.Size = Vector3.new(10, 10, 10)
+		damagePart.Position = Vector3.new(0, -5000, 0)
+	end
+	damageEnabled = false
+	damageButton.Text = "FlazedGrappleKill"
 end
 
 disableDamage()
@@ -91,63 +91,87 @@ disableDamage()
 local UserInputService = game:GetService("UserInputService")
 
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if gameProcessed then return end
-    if input.UserInputType == Enum.UserInputType.Keyboard then
-        if input.KeyCode == Enum.KeyCode.F or input.KeyCode == Enum.KeyCode.V then
-            if not damageEnabled then
-                enableDamage()
-                -- Disable after 0.3 seconds
-                task.delay(0.3, function()
-                    disableDamage()
-                end)
-            end
-        end
-    end
+	if gameProcessed then return end
+	if input.UserInputType == Enum.UserInputType.Keyboard then
+		if input.KeyCode == Enum.KeyCode.F or input.KeyCode == Enum.KeyCode.V then
+			if not damageEnabled then
+				enableDamage()
+				task.delay(0.3, function()
+					disableDamage()
+				end)
+			end
+		end
+	end
 end)
 
 createToggleButton("Toggle Touch", function(isEnabled)
-    for _, v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-        if v:IsA("BasePart") then
-            v.CanCollide = not isEnabled
-            v.CanTouch = not isEnabled
-        end
-    end
+	for _, v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+		if v:IsA("BasePart") then
+			v.CanCollide = not isEnabled
+			v.CanTouch = not isEnabled
+		end
+	end
 end)
 
 createToggleButton("Remove Ragdoll", function(isEnabled)
-    if isEnabled then
-        local LocalPlayer = game.Players.LocalPlayer
-        if LocalPlayer.Character:FindFirstChild("ragdollValue") then
-            LocalPlayer.Character.ragdollValue:Destroy()
-        end
-    end
+	if isEnabled then
+		local LocalPlayer = game.Players.LocalPlayer
+		if LocalPlayer.Character:FindFirstChild("ragdollValue") then
+			LocalPlayer.Character.ragdollValue:Destroy()
+		end
+	end
 end)
 
+-- Auto-remove ragdoll on respawn
+local LocalPlayer = game.Players.LocalPlayer
+
+local function monitorRagdoll(character)
+	task.spawn(function()
+		while character and character.Parent do
+			local ragdoll = character:FindFirstChild("ragdollValue")
+			if ragdoll then
+				ragdoll:Destroy()
+			end
+			task.wait(0.1)
+		end
+	end)
+end
+
+LocalPlayer.CharacterAdded:Connect(function(character)
+	monitorRagdoll(character)
+end)
+
+if LocalPlayer.Character then
+	monitorRagdoll(LocalPlayer.Character)
+end
+
+-- Dragging
 local dragging, dragInput, dragStart, startPos
 
 local dragBar = Instance.new("Frame")
-dragBar.Size = UDim2.new(1, 0, 0, 20)  -- The bar you will drag (Top part of the frame)
+dragBar.Size = UDim2.new(1, 0, 0, 20)
 dragBar.BackgroundColor3 = Color3.new(0, 0, 0)
 dragBar.Parent = frame
 
 dragBar.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStart = input.Position
-        startPos = frame.Position
-        input.Consumed = true
-    end
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		dragStart = input.Position
+		startPos = frame.Position
+		input.Consumed = true
+	end
 end)
 
 dragBar.InputChanged:Connect(function(input)
-    if dragging then
-        local delta = input.Position - dragStart
-        frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-    end
+	if dragging then
+		local delta = input.Position - dragStart
+		frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+	end
 end)
 
 dragBar.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = false
-    end
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = false
+	end
 end)
+game.StarterGui:SetCore("SendNotification", {Title = "Working.", Text = "Flazed Grapple Kill, Loaded", Duration = 4,})
