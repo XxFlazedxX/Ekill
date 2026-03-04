@@ -10,7 +10,6 @@ gui.ResetOnSpawn = false
 gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 gui.Parent = game:GetService("CoreGui")
 
--- Frame (smaller)
 local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0, 180, 0, 84)
 frame.Position = UDim2.new(1, -190, 0, 20)
@@ -24,7 +23,6 @@ local stroke = Instance.new("UIStroke", frame)
 stroke.Color = Color3.fromRGB(90, 90, 90)
 stroke.Thickness = 1
 
--- Title (renamed)
 local title = Instance.new("TextLabel")
 title.Text = "By Flazed"
 title.Size = UDim2.new(1, -16, 0, 18)
@@ -36,7 +34,6 @@ title.TextSize = 12
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = frame
 
--- Animated Dot
 local dot = Instance.new("Frame")
 dot.Size = UDim2.new(0, 6, 0, 6)
 dot.Position = UDim2.new(0, 10, 0, 10)
@@ -58,7 +55,6 @@ task.spawn(function()
 	end
 end)
 
--- Rotating Ring
 local ring = Instance.new("ImageLabel")
 ring.Size = UDim2.new(0, 22, 0, 22)
 ring.Position = UDim2.new(0.5, -11, 1, -26)
@@ -73,7 +69,6 @@ RunService.RenderStepped:Connect(function()
 	ring.Rotation += 1
 end)
 
--- Kill Status (CLICK TO TOGGLE)
 local killStatus = Instance.new("TextButton")
 killStatus.Text = "Kill: OFF"
 killStatus.Size = UDim2.new(1, -16, 0, 18)
@@ -86,7 +81,6 @@ killStatus.TextXAlignment = Enum.TextXAlignment.Left
 killStatus.AutoButtonColor = false
 killStatus.Parent = frame
 
--- Sub status labels
 local touchStatus = Instance.new("TextLabel")
 touchStatus.Text = "Touch: ON"
 touchStatus.Size = UDim2.new(1, -16, 0, 16)
@@ -109,7 +103,6 @@ ragdollStatus.TextSize = 11
 ragdollStatus.TextXAlignment = Enum.TextXAlignment.Left
 ragdollStatus.Parent = frame
 
--- ===== Grapple Kill Logic & State =====
 local damagePart = workspace:FindFirstChild("Pit") and workspace.Pit:FindFirstChild("Damage")
 local damageTouchedConnection
 local isKillOn = false -- manual toggle state
@@ -156,26 +149,21 @@ end
 disableDamage()
 updateUI()
 
--- Click = toggle persistent ON/OFF
 killStatus.MouseButton1Click:Connect(function()
 	isKillOn = not isKillOn
 	if isKillOn then enableDamage() else disableDamage() end
 	updateUI()
 end)
 
--- F = 2-second pulse (only if not already ON)
 UserInputService.InputBegan:Connect(function(input, gpe)
 	if gpe then return end
 	if input.KeyCode == Enum.KeyCode.F then
 		if isKillOn then
-			-- already ON by user; do nothing (don’t cut it off)
 			return
 		end
-		-- temporary ON
 		enableDamage()
 		killStatus.Text = "Kill: ON"
 		task.delay(2, function()
-			-- turn OFF only if user still hasn't toggled it ON
 			if not isKillOn then
 				disableDamage()
 				updateUI()
@@ -184,7 +172,6 @@ UserInputService.InputBegan:Connect(function(input, gpe)
 	end
 end)
 
--- Always apply: No touch
 local function applyNoTouchToPart(part)
 	if part:IsA("BasePart") then
 		part.CanCollide = false
@@ -203,7 +190,6 @@ LocalPlayer.CharacterAdded:Connect(applyNoTouchToCharacter)
 if LocalPlayer.Character then applyNoTouchToCharacter(LocalPlayer.Character) end
 touchStatus.Text = "Touch: ON"
 
--- Always apply: Remove ragdoll
 local function monitorRagdoll(character)
 	task.spawn(function()
 		while character and character.Parent do
@@ -217,7 +203,6 @@ end
 LocalPlayer.CharacterAdded:Connect(monitorRagdoll)
 if LocalPlayer.Character then monitorRagdoll(LocalPlayer.Character) end
 
--- Dragging
 local dragging = false
 local dragStart, startPos
 
