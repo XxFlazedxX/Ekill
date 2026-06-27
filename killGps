@@ -121,13 +121,8 @@ local function enableDamage()
 	local root = character:WaitForChild("HumanoidRootPart")
 	damagePart.CFrame = root.CFrame
 	damagePart.Size = Vector3.new(9999999, 9999999, 9999999)
-	if not damageTouchedConnection then
-		damageTouchedConnection = damagePart.Touched:Connect(function(hit)
-			if hit.Parent and hit.Parent:FindFirstChild("Humanoid") then
-				hit.Parent.Humanoid.Health = 0
-			end
-		end)
-	end
+	-- Removed the local hit.Parent.Humanoid.Health = 0 override line 
+	-- This ensures health bars show real values and only hit 0 when the server registers an actual kill
 end
 
 local function disableDamage()
